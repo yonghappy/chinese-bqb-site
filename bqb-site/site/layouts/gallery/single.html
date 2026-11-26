@@ -1,0 +1,22 @@
+{{ define "main" }}
+  {{ $slug := .Params.category }}
+  {{ $images := index hugo.Data.galleries $slug }}
+  <nav class="breadcrumbs" aria-label="当前位置"><a href="{{ "" | relURL }}">全部分类</a><span>/</span><span>{{ .Title }}</span></nav>
+  <div class="gallery-actions"><button class="button primary" id="download-pack" data-filename="{{ .Title }}.zip" {{ if not $images }}disabled{{ end }}>打包下载 ↓</button></div>
+  {{ if $images }}
+    <div class="gallery-toolbar"><label class="filter-field"><span aria-hidden="true">⌕</span><input type="search" id="gallery-filter" placeholder="在这个分类里找一找…" aria-label="搜索当前分类"></label></div>
+    <div class="image-grid" id="image-grid">
+    {{ range $images }}
+      <article class="image-card" data-name="{{ .label }}">
+        <a class="image-preview" href="{{ .src | relURL }}" data-preview data-name="{{ .name }}" data-src="{{ .src | relURL }}" data-animated="{{ if .animated }}true{{ else }}false{{ end }}"><img src="{{ if .animated }}{{ .src | relURL }}{{ else }}{{ .thumb | relURL }}{{ end }}" width="360" height="300" alt="{{ .label }}" loading="lazy"></a>
+        {{ partial "maker-link.html" (dict "src" .src "label" .label) }}
+        <div class="image-info">
+          <div class="image-caption"><span title="{{ .label }}">{{ .label }}</span></div>
+          <div class="image-actions"><a class="image-download" href="{{ .src | relURL }}" download="{{ .name }}" aria-label="保存 {{ .name }}" title="下载原图"><span>下载</span></a><button type="button" class="image-share" data-src="{{ .src | relURL }}" data-name="{{ .name }}" title="分享原图" aria-label="分享 {{ .name }}"><span>分享</span></button></div>
+        </div>
+      </article>
+    {{ end }}
+    </div>
+    <p class="empty-state" id="gallery-empty" role="status" hidden>没有找到这张表情包，换个词试试吧。</p>
+  {{ else }}<p class="empty-state">这个分类还没有图片，快乐正在路上。</p>{{ end }}
+{{ end }}

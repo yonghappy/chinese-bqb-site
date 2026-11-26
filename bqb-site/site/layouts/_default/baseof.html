@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ .Description | default site.Params.description }}">
+  <meta name="theme-color" content="#fbf7ed">
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KXR2XR');</script>
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · Sotaku{{ end }}</title>
+  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="icon" href="{{ "assets/icon.png" | relURL }}">
+  {{ with resources.Get "css/site.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{ end }}
+  {{ $scripts := slice (resources.Get "js/zip.js") (resources.Get "js/loading.js") (resources.Get "js/site.js") }}
+  {{ with $scripts | resources.Concat "js/app.js" | minify | fingerprint }}
+    <script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{ end }}
+</head>
+<body data-base="{{ "" | relURL }}" data-category="{{ .Params.category }}" data-layout="{{ .Layout }}">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KXR2XR" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <a class="skip-link" href="#main">跳到内容</a>
+  <header class="mobile-bar"><button id="menu-button" aria-expanded="false" aria-controls="sidebar" aria-label="打开分类目录">☰</button><a href="{{ "" | relURL }}">Sotaku</a><a href="{{ "search/" | relURL }}" aria-label="搜索表情包">搜索</a></header>
+  <button class="nav-backdrop" id="nav-backdrop" aria-label="关闭分类目录" hidden></button>
+  <div class="site-shell">
+    {{ partial "sidebar.html" . }}
+    <main class="site-main" id="main">
+      <section class="reader-sheet">
+        <span class="sheet-corner corner-tl" aria-hidden="true"></span><span class="sheet-corner corner-tr" aria-hidden="true"></span><span class="sheet-corner corner-bl" aria-hidden="true"></span><span class="sheet-corner corner-br" aria-hidden="true"></span>
+        <div class="page-content">{{ block "main" . }}{{ end }}</div>
+        {{ partial "footer.html" . }}
+      </section>
+    </main>
+  </div>
+  <dialog id="preview" aria-labelledby="preview-title">
+    <div class="preview-head"><p id="preview-title"></p><button type="button" class="icon-button" id="preview-close" aria-label="关闭预览">×</button></div>
+    <div class="preview-stage"><button type="button" class="icon-button" id="preview-prev" aria-label="上一张">‹</button><img id="preview-image" alt=""><button type="button" class="icon-button" id="preview-next" aria-label="下一张">›</button></div>
+    <p class="preview-note" id="preview-position"></p>
+    <div class="preview-actions"><a class="button primary" id="preview-download" download>保存原图</a><a class="button" id="preview-original" target="_blank" rel="noopener">打开原图</a><a class="button" id="preview-maker" href="{{ "maker/" | relURL }}" target="_blank" rel="noopener">制作同款</a></div>
+    <p class="preview-note" id="preview-maker-note" hidden></p>
+  </dialog>
+  <p class="toast" id="toast" role="status" hidden></p>
+  <div class="nav-loading" id="nav-loading" role="status" aria-live="polite" aria-atomic="true" hidden><span class="nav-loading-spinner" aria-hidden="true"></span><span class="nav-loading-text">正在打开编辑器…</span></div>
+</body>
+</html>

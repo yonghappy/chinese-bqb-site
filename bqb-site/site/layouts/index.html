@@ -1,0 +1,8 @@
+{{ define "main" }}
+  <div class="hero">
+    <h1>表情包的博物馆 · 中国表情包大集合 · 聚欢乐~</h1>
+    <div class="stats"><span><strong>{{ hugo.Data.catalog.total | lang.FormatNumber 0 }}</strong> 张表情包</span><span><strong>{{ len hugo.Data.catalog.categories }}</strong> 个分类</span></div>
+    <form class="main-search" action="{{ "search/" | relURL }}" role="search"><span aria-hidden="true">⌕</span><input type="search" name="q" required placeholder="搜一搜：开心、猫咪、程序员…" aria-label="搜索表情包"><button type="submit">找表情</button></form>
+  </div>
+  {{ partial "categories.html" . }}
+{{ end }}

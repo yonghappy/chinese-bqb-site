@@ -1,0 +1,7 @@
+{{ define "main" }}
+  <form class="main-search" id="search-form" action="{{ .RelPermalink }}" role="search"><span aria-hidden="true">⌕</span><input type="search" name="q" id="search-query" placeholder="输入关键词，例如：程序员" aria-label="搜索表情包"><button type="submit">搜索</button></form>
+  <p class="search-status" id="search-status" role="status" hidden></p>
+  <div class="image-grid" id="search-results"></div>
+  <button class="button load-more" id="load-more" hidden>再看一些 ↓</button>
+  <noscript><p class="empty-state">搜索需要启用 JavaScript。你也可以<a href="{{ "" | relURL }}">按分类浏览全部表情包</a>。</p></noscript>
+{{ end }}
